@@ -1,0 +1,39 @@
+import RPi.GPIO as GPIO
+import time
+
+D = [26,19,13,6,5,11,9,10]
+d = D[::-1]
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(GPIO.OUT)
+GPIO.setup(D,GPIO.OUT)
+
+
+GPIO.output(D, 0)
+
+def decToBinList(decNumber):
+    a = []
+    for i in range(8):
+        a.append(decNumber%2)
+        decNumber//=2
+    return a[::-1]
+
+def num2dac(value):
+    value = decToBinList(value)
+    for j in range(8):
+        GPIO.output(D[j],value[j])
+    time.sleep(0.02)
+
+
+try:
+    while True:
+	repetitionsNumber = int(input())
+    if repetitionsNumber<0:
+        1/0
+    num2dac(input())
+except ZeroDivisionError:
+    print("Только число от 0 до 255")
+except ValueError:
+    print("Только число от 0 до 255")
+finally:    
+    GPIO.cleanup()
